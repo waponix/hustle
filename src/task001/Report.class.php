@@ -40,13 +40,13 @@ class Report {
 
         global $pdoConnection;
 
-        $sql = <<<TEXT
+        $sql = <<<SQL
             SELECT o.id AS orderId, o.created, oi.description, oi.quantity, oi.unitPrice, oi.tax1, oi.tax2 
             FROM orders AS o
             INNER JOIN orderItems AS oi ON o.id = oi.orderId
             %s
             ORDER BY o.created ASC
-        TEXT;
+        SQL;
 
         // build the query conditions
         $where = [];
