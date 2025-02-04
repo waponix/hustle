@@ -2,6 +2,7 @@
 require_once __DIR__ . '/database.php';
 
 class Report {
+    const INPUT_DATE_FORMAT = 'Y-m-d H:i:s';
     const DATE_FORMAT = 'Y-m-d';
     const INVALID_DATE_VALUE = null; // update this value to your requirement
 
@@ -56,14 +57,14 @@ class Report {
         if (!empty($startDate) && !empty($endDate)) {
             $where[] = '(o.created BETWEEN :startDate AND :endDate)';
             $this
-                ->setParameter('startDate', PDO::PARAM_STR, $startDate->format(self::DATE_FORMAT))
-                ->setParameter('endDate', PDO::PARAM_STR, $endDate->format(self::DATE_FORMAT));
+                ->setParameter('startDate', PDO::PARAM_STR, $startDate->format(self::INPUT_DATE_FORMAT))
+                ->setParameter('endDate', PDO::PARAM_STR, $endDate->format(self::INPUT_DATE_FORMAT));
         } else if (!empty($startDate)) {
             $where[] = 'o.created >= :startDate';
-            $this->setParameter('startDate', PDO::PARAM_STR, $startDate->format(self::DATE_FORMAT));
+            $this->setParameter('startDate', PDO::PARAM_STR, $startDate->format(self::INPUT_DATE_FORMAT));
         } else if (!empty($endDate)) {
             $where[] = 'o.created <= :endDate';
-            $this->setParameter('endDate', PDO::PARAM_STR, $endDate->format(self::DATE_FORMAT));
+            $this->setParameter('endDate', PDO::PARAM_STR, $endDate->format(self::INPUT_DATE_FORMAT));
         }
 
         if (!empty($paymentMethod)) {
