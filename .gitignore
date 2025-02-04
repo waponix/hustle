@@ -1,0 +1,16 @@
+vendor
+doc
+.vscode
+.env
+.env.example
+.example
+.htaccess
+.index
+apache-config.conf
+composer.json
+composer.lock
+docker-compose.yml
+index.php
+README.md
+src/database
+src/migration
