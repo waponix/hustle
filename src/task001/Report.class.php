@@ -44,6 +44,8 @@ class Report {
             SELECT o.id AS orderId, o.created, oi.description, oi.quantity, oi.unitPrice, oi.tax1, oi.tax2 
             FROM orders AS o
             INNER JOIN orderItems AS oi ON o.id = oi.orderId
+            %s
+            ORDER BY o.created ASC
         TEXT;
 
         // build the query conditions
@@ -73,10 +75,12 @@ class Report {
         }
 
         if (count($where) > 0) {
-            $sql .= "\n WHERE " . implode(' AND ', $where);
+            $where = "\n WHERE " . implode(' AND ', $where);
+        } else {
+            $where = '';
         }
 
-        $statement = $pdoConnection->prepare($sql);
+        $statement = $pdoConnection->prepare(sprintf($sql, $where));
         
         if (!empty($this->parameters)) {
             foreach ($this->parameters as $name => $parameter) {
