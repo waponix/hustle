@@ -233,6 +233,75 @@ class ReportTest extends TestCase {
         $this->assertEquals(self::RESULT_WITH_INVALID_CREATION_DATE, $result);
     }
 
+    public function testGetJsonShouldReturnEmptyWhenAParameterIsInvalid() {
+        $statementMock = $this->createMock(PDOStatement::class);
+        $statementMock->method('execute')->willReturn(true);
+        $statementMock->method('fetch')->willReturnOnConsecutiveCalls(
+            [
+                'orderId' => '111',
+                'created' => '2024-12-25',
+                'description' => '20 yard dumpster',
+                'quantity' => '1.00000',
+                'unitPrice' => '299.00000',
+                'tax1' => '0.05000',
+                'tax2' => '0.00000',
+            ],
+            [
+                'orderId' => '111',
+                'created' => '2024-12-25',
+                'description' => 'weight charge',
+                'quantity' => '1.14200',
+                'unitPrice' => '99.00000',
+                'tax1' => '0.05000',
+                'tax2' => '0.00000',
+            ],
+            [
+                'orderId' => '115',
+                'created' => '2024-12-26',
+                'description' => '15 yard dumpster',
+                'quantity' => '1.00000',
+                'unitPrice' => '249.00000',
+                'tax1' => '0.05000',
+                'tax2' => '0.00000',
+            ],
+            [
+                'orderId' => '115',
+                'created' => '2024-12-26',
+                'description' => 'extra days',
+                'quantity' => '4.00000',
+                'unitPrice' => '20.00000',
+                'tax1' => '0.05000',
+                'tax2' => '0.00000',
+            ],
+            [
+                'orderId' => '115',
+                'created' => '2024-12-26',
+                'description' => 'weight charge',
+                'quantity' => '0.90500',
+                'unitPrice' => '99.00000',
+                'tax1' => '0.05000',
+                'tax2' => '0.00000',
+            ],
+            false
+        );
+
+        $report = new Report('not_a_valid_date');
+        $result = $report->getJson();
+
+        $this->assertEquals([], $result);
+
+
+        $report = new Report(null, 'not_a_valid_date');
+        $result = $report->getJson();
+        
+        $this->assertEquals([], $result);
+
+        $report = new Report('not_a_valid_date', 'not_a_valid_date');
+        $result = $report->getJson();
+        
+        $this->assertEquals([], $result);
+    }
+
     public function testGetErrorsShouldHaveErrorWhenStartDateIsNotAValidDate() {
         $statementMock = $this->createMock(PDOStatement::class);
         $statementMock->method('execute')->willReturn(true);
