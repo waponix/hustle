@@ -75,7 +75,7 @@ class Report {
         }
 
         if (count($where) > 0) {
-            $where = "\n WHERE " . implode(' AND ', $where);
+            $where = 'WHERE ' . implode(' AND ', $where);
         } else {
             $where = '';
         }
