@@ -6,6 +6,106 @@ require_once __DIR__ . '/../src/task001/Report.class.php';
 class ReportTest extends TestCase {
     private $pdoConnection;
 
+    const RESULT_WITH_VALID_FORMAT = [
+        [
+            'orderId' => 111,
+            'created' => '2024-12-25',
+            'items' => [
+                [
+                    'description' => '20 yard dumpster',
+                    'quantity' => 1,
+                    'unitPrice' => 299,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'weight charge',
+                    'quantity' => 1.142,
+                    'unitPrice' => 99,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ]
+            ]
+        ],
+        [
+            'orderId' => 115,
+            'created' => '2024-12-26',
+            'items' => [
+                [
+                    'description' => '15 yard dumpster',
+                    'quantity' => 1,
+                    'unitPrice' => 249,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'extra days',
+                    'quantity' => 4,
+                    'unitPrice' => 20,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'weight charge',
+                    'quantity' => 0.905,
+                    'unitPrice' => 99,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ]
+            ]
+        ]
+    ];
+
+    const RESULT_WITH_INVALID_CREATION_DATE = [
+        [
+            'orderId' => 111,
+            'created' => Report::INVALID_DATE_VALUE,
+            'items' => [
+                [
+                    'description' => '20 yard dumpster',
+                    'quantity' => 1,
+                    'unitPrice' => 299,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'weight charge',
+                    'quantity' => 1.142,
+                    'unitPrice' => 99,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ]
+            ]
+        ],
+        [
+            'orderId' => 115,
+            'created' => '2024-12-26',
+            'items' => [
+                [
+                    'description' => '15 yard dumpster',
+                    'quantity' => 1,
+                    'unitPrice' => 249,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'extra days',
+                    'quantity' => 4,
+                    'unitPrice' => 20,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ],
+                [
+                    'description' => 'weight charge',
+                    'quantity' => 0.905,
+                    'unitPrice' => 99,
+                    'tax1' => 0.05,
+                    'tax2' => 0.
+                ]
+            ]
+        ]
+    ];
+
     protected function setUp(): void {
         $this->pdoConnection = $this->createMock(PDO::class);
         $GLOBALS['pdoConnection'] = $this->pdoConnection;
@@ -68,58 +168,8 @@ class ReportTest extends TestCase {
         $report = new Report('2024-12-25', '2024-12-26', 'Credit Card', 1);
         $result = $report->getJson();
 
-        $expected = [
-            [
-                'orderId' => 111,
-                'created' => '2024-12-25',
-                'items' => [
-                    [
-                        'description' => '20 yard dumpster',
-                        'quantity' => 1,
-                        'unitPrice' => 299,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'weight charge',
-                        'quantity' => 1.142,
-                        'unitPrice' => 99,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ]
-                ]
-            ],
-            [
-                'orderId' => 115,
-                'created' => '2024-12-26',
-                'items' => [
-                    [
-                        'description' => '15 yard dumpster',
-                        'quantity' => 1,
-                        'unitPrice' => 249,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'extra days',
-                        'quantity' => 4,
-                        'unitPrice' => 20,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'weight charge',
-                        'quantity' => 0.905,
-                        'unitPrice' => 99,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ]
-                ]
-            ]
-        ];
-
         $this->assertEquals([], $report->getErrors());
-        $this->assertEquals($expected, $result);
+        $this->assertEquals(self::RESULT_WITH_VALID_FORMAT, $result);
     }
 
     public function testGetJsonShouldHandleInvalidCreatedValueFromDatabase() {
@@ -179,58 +229,8 @@ class ReportTest extends TestCase {
         $report = new Report('2024-12-25', '2024-12-26', 'Credit Card', 1);
         $result = $report->getJson();
 
-        $expected = [
-            [
-                'orderId' => 111,
-                'created' => Report::INVALID_DATE_VALUE,
-                'items' => [
-                    [
-                        'description' => '20 yard dumpster',
-                        'quantity' => 1,
-                        'unitPrice' => 299,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'weight charge',
-                        'quantity' => 1.142,
-                        'unitPrice' => 99,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ]
-                ]
-            ],
-            [
-                'orderId' => 115,
-                'created' => '2024-12-26',
-                'items' => [
-                    [
-                        'description' => '15 yard dumpster',
-                        'quantity' => 1,
-                        'unitPrice' => 249,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'extra days',
-                        'quantity' => 4,
-                        'unitPrice' => 20,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ],
-                    [
-                        'description' => 'weight charge',
-                        'quantity' => 0.905,
-                        'unitPrice' => 99,
-                        'tax1' => 0.05,
-                        'tax2' => 0.
-                    ]
-                ]
-            ]
-        ];
-
         $this->assertEquals([], $report->getErrors());
-        $this->assertEquals($expected, $result);
+        $this->assertEquals(self::RESULT_WITH_INVALID_CREATION_DATE, $result);
     }
 
     public function testGetErrorsShouldHaveErrorWhenStartDateIsNotAValidDate() {
