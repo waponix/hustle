@@ -52,7 +52,7 @@ class Report {
         return $this
             ->buildQuery()
             ->executeQuery()
-            ->getformattedQueryResult();
+            ->getFormattedQueryResult();
     }
 
     private function validateInputs() 
@@ -102,7 +102,7 @@ class Report {
         return $this;
     }
 
-    private function getformattedQueryResult()
+    private function getFormattedQueryResult()
     {
         if (count($this->raw) <= 0) {
             return [];
